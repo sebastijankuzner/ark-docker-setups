@@ -1,0 +1,701 @@
+version: '3.7'
+
+x-postgress: &postgresServiceDefinition
+  image: "postgres:alpine"
+  container_name: postgres1
+  environment:
+    POSTGRES_PASSWORD: password
+    POSTGRES_DB: ark_testnet
+    POSTGRES_USER: ark
+
+x-app: &nodeServiceDefinition
+  build: .
+  tty: true
+  privileged: true
+  working_dir: /core/packages/core
+  command: "/bin/sh -c 'sleep 20 && yarn ark core:run --network=testnet'"
+
+networks:
+  backend:
+      driver: bridge
+      ipam:
+          driver: default
+          config:
+              - subnet: 172.10.2.0/23
+
+services:
+  postgres1:
+    <<: *postgresServiceDefinition
+    container_name: postgres1
+    ports:
+      - "5432:5432"
+    networks:
+      backend:
+          ipv4_address: 172.10.2.2
+
+  postgres2: 
+    <<: *postgresServiceDefinition
+    container_name: postgres2
+    networks:
+      backend:
+          ipv4_address: 172.10.2.3
+
+  postgres3: 
+    <<: *postgresServiceDefinition
+    container_name: postgres3
+    networks:
+      backend:
+          ipv4_address: 172.10.2.4
+
+  postgres4: 
+    <<: *postgresServiceDefinition
+    container_name: postgres4
+    networks:
+      backend:
+          ipv4_address: 172.10.2.5
+
+  postgres5: 
+    <<: *postgresServiceDefinition
+    container_name: postgres5
+    networks:
+      backend:
+          ipv4_address: 172.10.2.6
+
+  postgres6: 
+    <<: *postgresServiceDefinition
+    container_name: postgres6
+    networks:
+      backend:
+          ipv4_address: 172.10.2.7
+
+  
+  postgres7: 
+    <<: *postgresServiceDefinition
+    container_name: postgres7
+    networks:
+      backend:
+          ipv4_address: 172.10.2.8
+
+  postgres8: 
+    <<: *postgresServiceDefinition
+    container_name: postgres8
+    networks:
+      backend:
+          ipv4_address: 172.10.2.9
+
+  postgres9: 
+    <<: *postgresServiceDefinition
+    container_name: postgres9
+    networks:
+      backend:
+          ipv4_address: 172.10.2.10
+
+  postgres10: 
+    <<: *postgresServiceDefinition
+    container_name: postgres10
+    networks:
+      backend:
+          ipv4_address: 172.10.2.11
+
+  postgres11: 
+    <<: *postgresServiceDefinition
+    container_name: postgres11
+    networks:
+      backend:
+          ipv4_address: 172.10.2.12
+
+  postgres12: 
+    <<: *postgresServiceDefinition
+    container_name: postgres12
+    networks:
+      backend:
+          ipv4_address: 172.10.2.13
+
+  postgres13: 
+    <<: *postgresServiceDefinition
+    container_name: postgres13
+    networks:
+      backend:
+          ipv4_address: 172.10.2.14
+
+  postgres14: 
+    <<: *postgresServiceDefinition
+    container_name: postgres14
+    networks:
+      backend:
+          ipv4_address: 172.10.2.15
+
+  postgres15: 
+    <<: *postgresServiceDefinition
+    container_name: postgres15
+    networks:
+      backend:
+          ipv4_address: 172.10.2.16
+
+  postgres16: 
+    <<: *postgresServiceDefinition
+    container_name: postgres16
+    networks:
+      backend:
+          ipv4_address: 172.10.2.17
+
+  postgres17: 
+    <<: *postgresServiceDefinition
+    container_name: postgres17
+    networks:
+      backend:
+          ipv4_address: 172.10.2.18
+
+  postgres18: 
+    <<: *postgresServiceDefinition
+    container_name: postgres18
+    networks:
+      backend:
+          ipv4_address: 172.10.2.19
+
+  postgres19: 
+    <<: *postgresServiceDefinition
+    container_name: postgres19
+    networks:
+      backend:
+          ipv4_address: 172.10.2.20
+
+  postgres20: 
+    <<: *postgresServiceDefinition
+    container_name: postgres20
+    networks:
+      backend:
+          ipv4_address: 172.10.2.21
+
+  postgres21: 
+    <<: *postgresServiceDefinition
+    container_name: postgres21
+    networks:
+      backend:
+          ipv4_address: 172.10.2.22
+                  
+  postgres22: 
+    <<: *postgresServiceDefinition
+    container_name: postgres22
+    networks:
+      backend:
+          ipv4_address: 172.10.2.23
+                            
+  postgres23: 
+    <<: *postgresServiceDefinition
+    container_name: postgres23
+    networks:
+      backend:
+          ipv4_address: 172.10.2.24
+                                      
+  postgres24: 
+    <<: *postgresServiceDefinition
+    container_name: postgres24
+    networks:
+      backend:
+          ipv4_address: 172.10.2.25
+                                                
+  postgres25: 
+    <<: *postgresServiceDefinition
+    container_name: postgres25
+    networks:
+      backend:
+          ipv4_address: 172.10.2.26
+                                                          
+  postgres26: 
+    <<: *postgresServiceDefinition
+    container_name: postgres26
+    networks:
+      backend:
+          ipv4_address: 172.10.2.27
+                                                                    
+  postgres27: 
+    <<: *postgresServiceDefinition
+    container_name: postgres27
+    networks:
+      backend:
+          ipv4_address: 172.10.2.28
+                                                                              
+  postgres28: 
+    <<: *postgresServiceDefinition
+    container_name: postgres28
+    networks:
+      backend:
+          ipv4_address: 172.10.2.29
+                                                                                        
+  postgres29: 
+    <<: *postgresServiceDefinition
+    container_name: postgres29
+    networks:
+      backend:
+          ipv4_address: 172.10.2.30
+                                                                                                  
+  postgres30: 
+    <<: *postgresServiceDefinition
+    container_name: postgres30
+    networks:
+      backend:
+          ipv4_address: 172.10.2.31
+
+  node1:
+    build: .
+    container_name: node1
+    tty: true
+    privileged: true
+    working_dir: /core/packages/core
+    environment:
+      CORE_DB_HOST: postgres1
+      CORE_PATH_CONFIG: /core_config
+    volumes:
+      - core:/core
+      - ./config/core1:/core_config
+    ports:
+      - "4000:4000"
+      - "0.0.0.0:4013:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.2
+    command: "/bin/sh -c 'yarn ark core:run --network=testnet'"
+
+  node2:
+    <<: *nodeServiceDefinition
+    container_name: node2
+    volumes:
+      - core:/core
+      - ./config/core2:/core_config
+    environment:
+      CORE_DB_HOST: postgres2
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4023:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.3
+
+  node3:
+    <<: *nodeServiceDefinition
+    container_name: node3
+    volumes:
+      - core:/core
+      - ./config/core3:/core_config
+    environment:
+      CORE_DB_HOST: postgres3
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4033:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.4
+
+  node4:
+    <<: *nodeServiceDefinition
+    container_name: node4
+    volumes:
+      - core:/core
+      - ./config/core4:/core_config
+    environment:
+      CORE_DB_HOST: postgres4
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4043:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.5
+
+  node5:
+    <<: *nodeServiceDefinition
+    container_name: node5
+    volumes:
+      - core:/core
+      - ./config/core5:/core_config
+    environment:
+      CORE_DB_HOST: postgres5
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4053:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.6
+
+  node6:
+    <<: *nodeServiceDefinition
+    container_name: node6
+    volumes:
+      - core:/core
+      - ./config/core6:/core_config
+    environment:
+      CORE_DB_HOST: postgres6
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4063:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.7
+
+  node7:
+    <<: *nodeServiceDefinition
+    container_name: node7
+    volumes:
+      - core:/core
+      - ./config/core7:/core_config
+    environment:
+      CORE_DB_HOST: postgres7
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4073:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.8
+
+  node8:
+    <<: *nodeServiceDefinition
+    container_name: node8
+    volumes:
+      - core:/core
+      - ./config/core8:/core_config
+    environment:
+      CORE_DB_HOST: postgres8
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4083:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.9
+
+  node9:
+    <<: *nodeServiceDefinition
+    container_name: node9
+    volumes:
+      - core:/core
+      - ./config/core9:/core_config
+    environment:
+      CORE_DB_HOST: postgres9
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4093:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.10
+
+  node10:
+    <<: *nodeServiceDefinition
+    container_name: node10
+    volumes:
+      - core:/core
+      - ./config/core10:/core_config
+    environment:
+      CORE_DB_HOST: postgres10
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4103:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.11
+
+  node11:
+    <<: *nodeServiceDefinition
+    container_name: node11
+    volumes:
+      - core:/core
+      - ./config/core11:/core_config
+    environment:
+      CORE_DB_HOST: postgres11
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4113:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.12
+
+  node12:
+    <<: *nodeServiceDefinition
+    container_name: node12
+    volumes:
+      - core:/core
+      - ./config/core12:/core_config
+    environment:
+      CORE_DB_HOST: postgres12
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4123:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.13
+
+  node13:
+    <<: *nodeServiceDefinition
+    container_name: node13
+    volumes:
+      - core:/core
+      - ./config/core13:/core_config
+    environment:
+      CORE_DB_HOST: postgres13
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4133:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.14
+
+  node14:
+    <<: *nodeServiceDefinition
+    container_name: node14
+    volumes:
+      - core:/core
+      - ./config/core14:/core_config
+    environment:
+      CORE_DB_HOST: postgres14
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4143:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.15
+
+  node15:
+    <<: *nodeServiceDefinition
+    container_name: node15
+    volumes:
+      - core:/core
+      - ./config/core15:/core_config
+    environment:
+      CORE_DB_HOST: postgres15
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4153:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.16
+
+  node16:
+    <<: *nodeServiceDefinition
+    container_name: node16
+    volumes:
+      - core:/core
+      - ./config/core16:/core_config
+    environment:
+      CORE_DB_HOST: postgres16
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4163:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.17
+
+  node17:
+    <<: *nodeServiceDefinition
+    container_name: node17
+    volumes:
+      - core:/core
+      - ./config/core17:/core_config
+    environment:
+      CORE_DB_HOST: postgres17
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4173:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.18
+
+  node18:
+    <<: *nodeServiceDefinition
+    container_name: node18
+    volumes:
+      - core:/core
+      - ./config/core18:/core_config
+    environment:
+      CORE_DB_HOST: postgres18
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4183:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.19
+
+  node19:
+    <<: *nodeServiceDefinition
+    container_name: node19
+    volumes:
+      - core:/core
+      - ./config/core19:/core_config
+    environment:
+      CORE_DB_HOST: postgres19
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4193:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.20
+
+  node20:
+    <<: *nodeServiceDefinition
+    container_name: node20
+    volumes:
+      - core:/core
+      - ./config/core20:/core_config
+    environment:
+      CORE_DB_HOST: postgres20
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4203:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.21
+
+  node21:
+    <<: *nodeServiceDefinition
+    container_name: node21
+    volumes:
+      - core:/core
+      - ./config/core21:/core_config
+    environment:
+      CORE_DB_HOST: postgres21
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4213:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.22
+
+  node22:
+    <<: *nodeServiceDefinition
+    container_name: node22
+    volumes:
+      - core:/core
+      - ./config/core22:/core_config
+    environment:
+      CORE_DB_HOST: postgres22
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4223:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.23
+
+  node23:
+    <<: *nodeServiceDefinition
+    container_name: node23
+    volumes:
+      - core:/core
+      - ./config/core23:/core_config
+    environment:
+      CORE_DB_HOST: postgres23
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4233:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.24
+
+  node24:
+    <<: *nodeServiceDefinition
+    container_name: node24
+    volumes:
+      - core:/core
+      - ./config/core24:/core_config
+    environment:
+      CORE_DB_HOST: postgres24
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4243:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.25
+
+  node25:
+    <<: *nodeServiceDefinition
+    container_name: node25
+    volumes:
+      - core:/core
+      - ./config/core25:/core_config
+    environment:
+      CORE_DB_HOST: postgres25
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4253:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.26
+
+  node26:
+    <<: *nodeServiceDefinition
+    container_name: node26
+    volumes:
+      - core:/core
+      - ./config/core26:/core_config
+    environment:
+      CORE_DB_HOST: postgres26
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4263:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.27
+
+  node27:
+    <<: *nodeServiceDefinition
+    container_name: node27
+    volumes:
+      - core:/core
+      - ./config/core27:/core_config
+    environment:
+      CORE_DB_HOST: postgres27
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4273:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.28
+
+  node28:
+    <<: *nodeServiceDefinition
+    container_name: node28
+    volumes:
+      - core:/core
+      - ./config/core28:/core_config
+    environment:
+      CORE_DB_HOST: postgres28
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4283:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.29
+
+  node29:
+    <<: *nodeServiceDefinition
+    container_name: node29
+    volumes:
+      - core:/core
+      - ./config/core29:/core_config
+    environment:
+      CORE_DB_HOST: postgres29
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4293:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.30
+
+  node30:
+    <<: *nodeServiceDefinition
+    container_name: node30
+    volumes:
+      - core:/core
+      - ./config/core30:/core_config
+    environment:
+      CORE_DB_HOST: postgres30
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4303:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.31
+
+volumes:
+  postgres:
+  core:
+    driver_opts:
+      type: none
+      device: /home/$USER/core
+      o: bind

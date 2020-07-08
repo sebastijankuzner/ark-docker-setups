@@ -1,0 +1,128 @@
+version: '3.7'
+
+x-postgress: &postgresServiceDefinition
+  image: "postgres:alpine"
+  container_name: postgres1
+  environment:
+    POSTGRES_PASSWORD: password
+    POSTGRES_DB: ark_testnet
+    POSTGRES_USER: ark
+
+x-app: &nodeServiceDefinition
+  build: .
+  tty: true
+  privileged: true
+  working_dir: /core/packages/core
+  command: "/bin/sh -c 'sleep 1 && yarn ark core:run --network=testnet'"
+
+networks:
+  backend:
+      driver: bridge
+      ipam:
+          driver: default
+          config:
+              - subnet: 172.10.2.0/23
+
+services:
+  postgres1:
+    <<: *postgresServiceDefinition
+    container_name: postgres1
+    ports:
+      - "5432:5432"
+    networks:
+      backend:
+          ipv4_address: 172.10.2.2
+
+  postgres2: 
+    <<: *postgresServiceDefinition
+    container_name: postgres2
+    networks:
+      backend:
+          ipv4_address: 172.10.2.3
+
+  postgres3: 
+    <<: *postgresServiceDefinition
+    container_name: postgres3
+    networks:
+      backend:
+          ipv4_address: 172.10.2.4
+
+  postgres4: 
+    <<: *postgresServiceDefinition
+    container_name: postgres4
+    networks:
+      backend:
+          ipv4_address: 172.10.2.5
+
+  node1:
+    build: .
+    container_name: node1
+    tty: true
+    privileged: true
+    working_dir: /core/packages/core
+    environment:
+      CORE_DB_HOST: postgres1
+      CORE_PATH_CONFIG: /core_config
+    volumes:
+      - core:/core
+      - ./config/core1:/core_config
+    ports:
+      - "4000:4000"
+      - "0.0.0.0:4013:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.2
+    command: "/bin/sh -c 'yarn ark core:run --network=testnet'"
+
+  node2:
+    <<: *nodeServiceDefinition
+    container_name: node2
+    volumes:
+      - core:/core
+      - ./config/core2:/core_config
+    environment:
+      CORE_DB_HOST: postgres2
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4023:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.3
+
+  node3:
+    <<: *nodeServiceDefinition
+    container_name: node3
+    volumes:
+      - core:/core
+      - ./config/core3:/core_config
+    environment:
+      CORE_DB_HOST: postgres3
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4033:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.4
+
+  node4:
+    <<: *nodeServiceDefinition
+    container_name: node4
+    volumes:
+      - core:/core
+      - ./config/core4:/core_config
+    environment:
+      CORE_DB_HOST: postgres4
+      CORE_PATH_CONFIG: /core_config
+    ports:
+      - "0.0.0.0:4043:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.5
+
+volumes:
+  postgres:
+  core:
+    driver_opts:
+      type: none
+      device: /home/$USER/core
+      o: bind

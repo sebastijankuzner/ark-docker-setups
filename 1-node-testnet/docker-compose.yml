@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  postgres:
+    image: "postgres:alpine"
+    container_name: postgres
+    ports:
+      - '0.0.0.0:5432:5432'
+    volumes:
+      - 'postgres:/var/lib/postgresql/data'
+    environment:
+     POSTGRES_PASSWORD: password
+     POSTGRES_DB: ark_testnet
+     POSTGRES_USER: ark
+
+  node:
+    build: .
+    container_name: node
+    tty: true
+    privileged: true
+    working_dir: /core/packages/core
+    environment:
+      CORE_DB_HOST: postgres
+    volumes:
+      - core:/core
+    ports:
+      - "4000:4000"
+      - "0.0.0.0:4013:4003"
+    command: "/bin/sh -c 'yarn full:testnet'"
+
+volumes:
+  postgres:
+  core:
+    driver_opts:
+      type: none
+      device: /home/$USER/core
+      o: bind

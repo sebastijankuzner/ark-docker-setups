@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+
+  node:
+    build: .
+    container_name: node_builder
+    tty: true
+    privileged: true
+    working_dir: /core
+    ports: 
+      - "0.0.0.0:122:22"
+    volumes:
+      - core:/core
+    # command: "/bin/sh -c 'service ssh restart'"
+
+
+volumes:
+  core:
+    driver_opts:
+      type: none
+      device: /home/$USER/core
+      o: bind
