@@ -1,5 +1,13 @@
 version: '3'
 
+networks:
+  backend:
+      driver: bridge
+      ipam:
+          driver: default
+          config:
+              - subnet: 172.10.2.0/23
+
 services:
   postgres:
     image: "postgres:alpine"
@@ -12,6 +20,9 @@ services:
      POSTGRES_PASSWORD: password
      POSTGRES_DB: ark_testnet
      POSTGRES_USER: ark
+    networks:
+      backend:
+        ipv4_address: 172.10.2.2
 
   node:
     build: .
@@ -19,14 +30,19 @@ services:
     tty: true
     privileged: true
     working_dir: /core/packages/core
-    environment:
-      CORE_DB_HOST: postgres
     volumes:
       - core:/core
+      - ./config/core1:/core_config
+    environment:
+      CORE_DB_HOST: postgres
+      CORE_PATH_CONFIG: /core_config
     ports:
       - "4000:4000"
       - "0.0.0.0:4013:4003"
-    command: "/bin/sh -c 'yarn full:testnet'"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.2
+    command: "/bin/sh -c 'yarn ark core:run --env=test --network=testnet'"
 
 volumes:
   postgres:

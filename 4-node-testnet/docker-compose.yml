@@ -13,7 +13,7 @@ x-app: &nodeServiceDefinition
   tty: true
   privileged: true
   working_dir: /core/packages/core
-  command: "/bin/sh -c 'sleep 1 && yarn ark core:run --network=testnet'"
+  command: "/bin/sh -c 'sleep 1 && node --trace-warnings ./bin/run core:run --network=testnet'"
 
 networks:
   backend:
@@ -115,9 +115,11 @@ services:
       CORE_PATH_CONFIG: /core_config
     ports:
       - "0.0.0.0:4043:4003"
+      - "0.0.0.0:9229:9229"
     networks:
       backend:
           ipv4_address: 172.10.3.5
+    command: "/bin/sh -c 'sleep 1 && node --inspect-brk=0.0.0.0:9229 ./bin/run core:run --network=testnet'"
 
 volumes:
   postgres:
