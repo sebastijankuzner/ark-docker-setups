@@ -119,7 +119,6 @@ services:
     networks:
       backend:
           ipv4_address: 172.10.3.5
-    command: "/bin/sh -c 'sleep 1 && node --inspect-brk=0.0.0.0:9229 ./bin/run core:run --network=testnet'"
 
 volumes:
   postgres:

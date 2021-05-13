@@ -57,7 +57,7 @@ services:
     networks:
       backend:
           ipv4_address: 172.10.3.2
-    command: "/bin/sh -c 'yarn ark core:run --networkStart --env=test --network=testnet'"
+    command: "/bin/sh -c 'node --version && yarn ark core:run --networkStart --env=test --network=testnet'"
 
   node2:
     build: .

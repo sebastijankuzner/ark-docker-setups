@@ -1,0 +1,173 @@
+version: '3.7'
+
+x-postgress: &postgresServiceDefinition
+  image: "postgres:alpine"
+  container_name: postgres1
+  environment:
+    POSTGRES_PASSWORD: password
+    POSTGRES_DB: ark_devnet
+    POSTGRES_USER: ark
+
+x-node: &nodeServiceDefinition
+  build: .
+  # container_name: node1
+  tty: true
+  privileged: true
+  working_dir: /core/packages/core
+  environment:
+    CORE_DB_HOST: 192.168.1.130
+    CORE_PATH_CONFIG: /core_config
+  # ports:
+    # - "4002:4002"
+    # - "0.0.0.0:4013:4003"
+  command: "/bin/sh -c 'yarn ark relay:run'"
+
+networks:
+  backend:
+      driver: bridge
+      ipam:
+          driver: default
+          config:
+              - subnet: 172.10.2.0/23
+
+services:
+  postgres1:
+    <<: *postgresServiceDefinition
+    container_name: postgres1
+    ports:
+      - "5432:5432"
+    volumes:
+      - 'postgres1:/var/lib/postgresql/data'
+    networks:
+      backend:
+          ipv4_address: 172.10.2.2
+
+  node1:
+    <<: *nodeServiceDefinition
+    container_name: node1
+    volumes:
+      - core:/core
+      - ./config/core1:/core_config
+    networks:
+      backend:
+          ipv4_address: 172.10.3.2
+
+  node2:
+    <<: *nodeServiceDefinition
+    container_name: node2
+    volumes:
+      - core:/core
+      - ./config/core1:/core_config
+    networks:
+      backend:
+          ipv4_address: 172.10.3.3
+
+  node3:
+    <<: *nodeServiceDefinition
+    container_name: node3
+    volumes:
+      - core:/core
+      - ./config/core1:/core_config
+    networks:
+      backend:
+          ipv4_address: 172.10.3.4
+
+  node4:
+    <<: *nodeServiceDefinition
+    container_name: node4
+    volumes:
+      - core:/core
+      - ./config/core1:/core_config
+    networks:
+      backend:
+          ipv4_address: 172.10.3.5
+
+  node5:
+    <<: *nodeServiceDefinition
+    container_name: node5
+    volumes:
+      - core:/core
+      - ./config/core1:/core_config
+    networks:
+      backend:
+          ipv4_address: 172.10.3.6
+
+  node6:
+    <<: *nodeServiceDefinition
+    container_name: node6
+    volumes:
+      - core:/core
+      - ./config/core1:/core_config
+    networks:
+      backend:
+          ipv4_address: 172.10.3.7
+
+  node7:
+    <<: *nodeServiceDefinition
+    container_name: node7
+    volumes:
+      - core:/core
+      - ./config/core1:/core_config
+    networks:
+      backend:
+          ipv4_address: 172.10.3.8
+
+  node8:
+    <<: *nodeServiceDefinition
+    container_name: node8
+    volumes:
+      - core:/core
+      - ./config/core1:/core_config
+    networks:
+      backend:
+          ipv4_address: 172.10.3.9
+
+  node9:
+    <<: *nodeServiceDefinition
+    container_name: node9
+    volumes:
+      - core:/core
+      - ./config/core1:/core_config
+    networks:
+      backend:
+          ipv4_address: 172.10.3.10
+
+  node10:
+    <<: *nodeServiceDefinition
+    container_name: node10
+    volumes:
+      - core:/core
+      - ./config/core1:/core_config
+    networks:
+      backend:
+          ipv4_address: 172.10.3.11
+
+  node11:
+    build: .
+    restart: "no"
+    container_name: node11
+    tty: true
+    privileged: true
+    working_dir: /core/packages/core
+    environment:
+      CORE_DB_HOST: postgres1
+      CORE_PATH_CONFIG: /core_config
+    volumes:
+      - core:/core
+      - ./config/core11:/core_config
+    ports:
+      - "0.0.0.0:4023:4003"
+      - "0.0.0.0:9229:9229"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.12
+    command: "/bin/sh -c 'sleep 20 && yarn ark relay:run'"
+
+volumes:
+  postgres1:
+  postgres2:
+  core:
+    driver_opts:
+      type: none
+      device: /home/$USER/core
+      o: bind

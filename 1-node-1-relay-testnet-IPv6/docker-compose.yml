@@ -1,0 +1,95 @@
+version: '3.7'
+
+x-postgress: &postgresServiceDefinition
+  image: "postgres:alpine"
+  container_name: postgres1
+  environment:
+    POSTGRES_PASSWORD: password
+    POSTGRES_DB: ark_testnet
+    POSTGRES_USER: ark
+
+networks:
+  backend:
+      driver: bridge
+      enable_ipv6: true
+      ipam:
+          driver: default
+          config:
+              - subnet: 172.10.2.0/23
+              - subnet: 2001:3984:3989::/64
+
+services:
+  postgres1:
+    <<: *postgresServiceDefinition
+    container_name: postgres1
+    ports:
+      - "5432:5432"
+    volumes:
+      - 'postgres1:/var/lib/postgresql/data'
+    networks:
+      backend:
+          ipv4_address: 172.10.2.2
+
+  postgres2: 
+    <<: *postgresServiceDefinition
+    container_name: postgres2
+    volumes:
+      - 'postgres2:/var/lib/postgresql/data'
+    ports:
+      - "5431:5432"
+    networks:
+      backend:
+          ipv4_address: 172.10.2.3
+
+  node1:
+    build: .
+    container_name: node1
+    tty: true
+    privileged: true
+    working_dir: /core/packages/core
+    environment:
+      CORE_DB_HOST: postgres1
+      CORE_PATH_CONFIG: /core_config
+    volumes:
+      - core:/core
+      - ./config/core1:/core_config
+    ports:
+      - "4000:4000"
+      - "0.0.0.0:4013:4003"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.2
+          ipv6_address: 2001:3984:3989::101
+    command: "/bin/sh -c 'yarn ark core:run --networkStart --env=test --network=testnet'"
+
+  node2:
+    build: .
+    container_name: node2
+    tty: true
+    privileged: true
+    working_dir: /core/packages/core
+    environment:
+      CORE_DB_HOST: postgres2
+      CORE_PATH_CONFIG: /core_config
+    volumes:
+      - core:/core
+      - ./config/core2:/core_config
+    ports:
+      - "0.0.0.0:4023:4003"
+      - "0.0.0.0:9229:9229"
+    networks:
+      backend:
+          ipv4_address: 172.10.3.3
+          ipv6_address: 2001:3984:3989::102
+
+    command: "/bin/sh -c 'sleep 10 && yarn ark relay:run --networkStart --network=testnet'"
+    # command: "/bin/sh -c 'node --inspect-brk=0.0.0.0:9229 ./bin/run relay:run --networkStart --network=testnet'"
+
+volumes:
+  postgres1:
+  postgres2:
+  core:
+    driver_opts:
+      type: none
+      device: /home/$USER/core
+      o: bind

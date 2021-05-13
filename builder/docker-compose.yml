@@ -11,13 +11,14 @@ services:
     ports: 
       - "0.0.0.0:122:22"
     volumes:
-      - core:/core
+      - /home/ubuntu/core:/core
     # command: "/bin/sh -c 'service ssh restart'"
 
 
-volumes:
-  core:
-    driver_opts:
-      type: none
-      device: /home/$USER/core
-      o: bind
+#volumes:
+#  core:
+#    driver: local
+#    driver_opts:
+#      type: none
+#      device: /home/$USER/core
+#      o: bind
