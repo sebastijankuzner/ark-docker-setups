@@ -1,0 +1,21 @@
+version: '3.7'
+
+networks:
+  backend:
+      driver: bridge
+      ipam:
+          driver: default
+          config:
+              - subnet: 172.10.2.0/23
+
+services:
+  node1:
+    build: .
+    # container_name: node1
+    tty: true
+    privileged: true
+    networks:
+      backend:
+          # ipv4_address: 172.10.3.2
+    command: 'bash attack.sh'
+    # command: 'ls'
