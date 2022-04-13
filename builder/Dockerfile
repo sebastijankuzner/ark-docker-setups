@@ -1,4 +1,4 @@
-FROM node:14.15
+FROM node
 
 WORKDIR /core
 
@@ -10,7 +10,8 @@ RUN apt-get update && \
     python \
     vim \
     openssh-server && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* \
+    && cd /core && npm add -g pnpm
 
 RUN mkdir /var/run/sshd
 ADD authorized_keys /root/.ssh/authorized_keys

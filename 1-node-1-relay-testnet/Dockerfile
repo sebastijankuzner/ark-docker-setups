@@ -1,4 +1,4 @@
-FROM node:14.15
+FROM node
 
 WORKDIR /core
 
@@ -9,7 +9,8 @@ RUN apt-get update && \
     iptables \
     python \
     vim && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* \
+    && cd /core && npm add -g pnpm
 
 
 EXPOSE 4000 4003

@@ -57,7 +57,7 @@ services:
     networks:
       backend:
           ipv4_address: 172.10.3.2
-    command: "/bin/sh -c 'node --version && yarn ark core:run --networkStart --env=test --network=testnet'"
+    command: "/bin/sh -c 'node --version && pnpm run ark core:run -- --networkStart --env=test --network=testnet'"
 
   node2:
     build: .
@@ -77,7 +77,7 @@ services:
     networks:
       backend:
           ipv4_address: 172.10.3.3
-    command: "/bin/sh -c 'sleep 10 && yarn ark relay:run --networkStart --network=testnet'"
+    command: "/bin/sh -c 'sleep 10 && pnpm ark relay:run -- --networkStart --network=testnet'"
     # command: "/bin/sh -c 'node --inspect-brk=0.0.0.0:9229 ./bin/run relay:run --networkStart --network=testnet'"
 
 volumes:
